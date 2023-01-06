@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+
+</head>
+<style>
+ 
+</style>
+<body>
+    <div ng-app="App" ng-controller="AngularUserForm">
+        <form >
+        <label>username</label> 
+            <input type="text" name="username" ng-model="newdata.username"/>
+        <label>password</label> 
+            <input type="password" name="password" ng-model="newdata.password"/>
+            <br/>
+            <input type="hidden" ng-model="newdata.id" />
+          <br/>
+         <input type="button" value="Save" ng-click="savedata()" />
+        </form>
+        <br/>
+    <table >
+    <thead> 
+    <tr>
+        <th>username</th>
+        <th>password</th>
+        <th>mode</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="datas in data">
+        <td>{{ datas.username }}</td>
+        <td>{{ datas.password }}</td>
+        <td>
+            <a  href="#" ng-click="edit(datas.id)">edit</a> | 
+            <a href="#" ng-click="delete(datas.id)">delete</a>
+        </td>
+     </tr>
+    </tbody>
+    </table>    
+    </div>
+    <script>
+        var app = angular.module("App",[]);
+
+	app.controller('AngularUserForm', function($scope) {
+		var uid = 1;
+    $scope.data = [
+    {id:0, 'username': 'bhavin', 'password':'hello@123', 'phone': '123-2343-44'}
+    ];
+    
+    $scope.savedata = function() {     
+        if($scope.newdata.id == null) {
+             $scope.newdata.id = uid++;
+             $scope.data.push($scope.newdata);
+        } else {            
+             for(i in $scope.data) {
+                    if($scope.data[i].id == $scope.newdata.id) {
+                        $scope.data[i] = $scope.newdata;
+                    }
+             }                
+        }
+        $scope.newdata = {};
+    }
+    
+    $scope.delete = function(id) {
+        for(i in $scope.data) {
+            if($scope.data[i].id == id) {
+                $scope.data.splice(i,1);
+                $scope.newdata = {};
+            }
+        }        
+    }
+        
+    $scope.edit = function(id) {
+        for(i in $scope.data) {
+            if($scope.data[i].id == id) {
+                $scope.newdata = angular.copy($scope.data[i]);
+            }
+        }
+    }
+    });
+    </script>
+</body>
+</html>
